@@ -1,0 +1,97 @@
+#! /bin/bash
+
+#
+# Openbox pipe menu for X keyboard extension subsystem version 1.0
+#
+# Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+#--------------------------------------------------------------------------------------------------------------
+# This file is part of ob-xkb-menu.
+#
+# Ob-xkb-menu is free software: you can redistribute it and/or modify it under the terms of
+# the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# Ob-xkb-menu is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with ob-xkb-menu.
+# If not, see http://www.gnu.org/licenses/.
+#--------------------------------------------------------------------------------------------------------------
+#
+#
+# This script checks X keyboard extension subsystem configuration,
+# lists available keyboard layouts/variants and switches to the selected one.
+#
+# As X11 XKB utilities package does not offer any command line tool to get/change current layout
+# this script has to use xkblayout-state utility available from https://github.com/nonpop/xkblayout-state.
+# You might need to install libx11-dev and g++ packages to compile xkblayout-state.
+# Put compiled xkblayout-state in either $PATH or in the same directory with the script.
+#
+#--------------------------------------------------------------------------------------------------------------
+
+
+# Below are prefixes for menu items: check-mark and tab for current layout and just tab for the rest ones.
+# This might look not nice with non-proportional fonts. If you dislike this, comment out the following
+# two variables and uncomment the next one ICON variable. Don't forget to check whether it points
+# to the desired icon file.
+
+TICKED="&#10004;&#9;"
+UNTICKED="&#160;&#9;"
+
+# Desired check-mark icon fully qualified file name:
+# ICON=/usr/share/icons/lubuntu/actions/24/gtk-ok.svg
+
+# Name of the xkblayout-state executable
+XKBLAYOUT=xkblayout-state
+
+#--------------------------------------------------------------------------------------------------------------
+#	Main script code starts here
+#--------------------------------------------------------------------------------------------------------------
+
+if ! type "$XKBLAYOUT"
+then
+	XKBLAYOUT="${0%/*}/$XKBLAYOUT"
+	if [ ! -x "$XKBLAYOUT" ]
+	then
+		echo "<openbox_pipe_menu>"
+		echo "<separator label=\"xkblayout-state utility is not found\" />"
+		echo "</openbox_pipe_menu>"
+		exit 1
+	fi
+fi
+
+declare -a LAYOUTS_LIST
+mapfile -t LAYOUTS_LIST < <(${XKBLAYOUT} print "%S")
+LAYOUTS_COUNT=${#LAYOUTS_LIST[@]}
+CURRENT_LAYOUT_NUMBER=$(${XKBLAYOUT} print "%c")
+
+declare -a VARIANTS_LIST
+mapfile -t VARIANTS_LIST < <(${XKBLAYOUT} print "%V")
+
+echo "<openbox_pipe_menu>"
+echo "<separator label=\"Keyboard Layouts\" />"
+
+for (( i=0; i<LAYOUTS_COUNT; i++ ))
+do
+	if [ -n "${VARIANTS_LIST[$i]}" ]
+	then
+		LABEL="${LAYOUTS_LIST[$i]} (${VARIANTS_LIST[$i]})"
+	else
+		LABEL="${LAYOUTS_LIST[$i]}"
+	fi
+
+	if [ $i -eq $CURRENT_LAYOUT_NUMBER ]
+	then
+		echo "<item label=\"$TICKED$LABEL\" icon=\"$ICON\" >"
+	else
+		echo "<item label=\"$UNTICKED$LABEL\">"
+	fi
+	echo "	<action name=\"Execute\"><command>&quot;${XKBLAYOUT}&quot; set $i</command></action>"
+	echo "</item>"
+done
+
+echo "</openbox_pipe_menu>"
+
+exit 0
+#--------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,146 @@
+Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+See the end of the file for license conditions.
+-------------------------------------------------------------------------------
+
+This directory contains the ob-xkb-menu version 1.0.
+
+The ob-xkb-menu is Openbox pipe menu for X keyboard extension (XKB) subsystem.
+It checks XKB configuration, lists available keyboard layouts/variants and
+switches to the selected one.
+
+Software Requirements
+---------------------
+
+This package uses bash specific extensions and requires bash shell version 4+.
+
+Unfortunately no one standard package including X11 XKB utilities
+(x11-xkb-utils) offers any tool to get/set current keyboard layout. To handle
+this the script utilizes xkblayout-state tool which isn't a part of any standard
+packages and must be downloaded and compiled separately. It can be downloaded
+from its GitHub repository:
+
+  https://github.com/nonpop/xkblayout-state
+
+Optionally libx11-dev and g++ packages might be needed to compile the
+xkblayout-state tool.
+
+The following considerations must be also taken as the software requirements.
+
+A desktop specific keyboard layouts switcher is usually configured in its own
+way and its settings do not set up the XKB subsystem. Thus the script does not
+reflect such a desktop specific settings.
+
+The packages mentioned below can be used to manage the XKB subsytem. It can be
+configured in one of the following ways:
+    - system-wide settings of keyboard on the console and in X Window by manual
+      editing of /etc/default/keyboard file. See man keyboard
+      (keyboard-configuration package).
+    - system-wide settings in X configuration files by manual editing or using
+      localectl tool. See man xkeyboard-config (xkb-data package).
+    - user per session settings set up using setxkbmap tool
+      (x11-xkb-utils package). Usually such a command is added to one of user's
+      startup or rc files.
+The last one tool can also be used to check current configuration:
+    setxkbmap -print -verbose 10
+
+Downloading
+-----------
+
+Current version of ob-xkb-menu can be downloaded from the link below:
+
+  https://github.com/martynets/ob-xkb-menu/archive/1.0.zip
+
+The latest version can be checked here:
+
+  https://github.com/martynets/ob-xkb-menu/releases/latest
+
+The ob-xkb-menu package is also available via Git access from the GitHub server:
+
+  https://github.com/martynets/ob-xkb-menu.git
+
+Installation
+------------
+
+This script is the Openbox pipe menu and needs to be installed as per the
+Openbox requirements. It can be copied to any convenient location and reference
+to it must be added to Openbox menu file which name and location default to
+$HOME/.config/openbox/menu.xml. Something similar to the following must be
+added:
+
+    <menu id="ob-xkb-menu" label="Keyboard Layout"
+        execute="/path/to/script/ob-xkb-menu"
+            icon="/path/to/icontheme/apps/16/locale.svg"/>
+
+More information on Openbox menu configuration can be found on its wiki page:
+
+  http://openbox.org/wiki/Help:Menus
+
+The xkblayout-state tool must be installed in either $PATH or the same directory
+with the script.
+
+Additionally a keybinding can be assigned to this menu in the Openbox rc file.
+The file name and location default to $HOME/.config/openbox/rc.xml. Something
+similar to the following can be added to the keyboard section of the file:
+
+    <keybind key="C-k">
+      <action name="ShowMenu">
+        <menu>ob-xkb-menu</menu>
+      </action>
+    </keybind>
+
+Such a keybinding will serve as the visual keyboard layouts switcher.
+
+More information on Openbox configuration can be found on its wiki page:
+
+  http://openbox.org/wiki/Configuration
+
+Configuration
+-------------
+
+The ob-xkb-menu script does not support neither configuration files nor
+arguments.
+
+There are a few variables defined at the top of the script which in rare cases
+might need modifications:
+
+    - XKBLAYOUT - name of the executable file of the xkblayout-state tool.
+    - TICKED and UNTICKED - text strings which prefix the current keyboard
+      layout and the rest items of the menu respectively. The current one is
+      prefixed by check-mark and tab characters when the rest ones by
+      non-breaking space and tab characters.
+    - ICON - is commended out by default and may contain fully qualified file
+      name of the icon file to represent the current layout. If for some reason
+      use of icon is preferred then this variable must be uncommented, properly
+      setup and the above mentioned TICKED and UNTICKED variables commented out.
+
+Bug Reporting
+-------------
+
+You can send ob-xkb-menu bug reports and/or any compatibility issues directly to
+the author <martynets@volia.ua>.
+
+You can also use the online bug tracking system in the GitHub ob-xkb-menu
+project to submit new problem reports or search for existing ones:
+
+  https://github.com/martynets/ob-xkb-menu/issues
+
+Change Log
+----------
+
+1.0    Initial release
+
+-------------------------------------------------------------------------------
+Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+This file is part of ob-xkb-menu.
+
+Ob-xkb-menu is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 3 of the License, or (at your option) any later
+version.
+
+Ob-xkb-menu is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+ob-xkb-menu.  If not, see <http://www.gnu.org/licenses/>.
