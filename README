@@ -1,4 +1,4 @@
-Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+Copyright (C) 2014, 2016 Andriy Martynets <martynets@volia.ua>
 See the end of the file for license conditions.
 -------------------------------------------------------------------------------
 
@@ -48,9 +48,9 @@ Downloading
 
 Current version of ob-xkb-menu can be downloaded from the link below:
 
-  https://github.com/martynets/ob-xkb-menu/archive/1.0.zip
+  https://github.com/martynets/ob-xkb-menu/archive/master.zip
 
-The latest version can be checked here:
+The latest released version can be checked here:
 
   https://github.com/martynets/ob-xkb-menu/releases/latest
 
@@ -130,7 +130,7 @@ Change Log
 1.0    Initial release
 
 -------------------------------------------------------------------------------
-Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+Copyright (C) 2014, 2016 Andriy Martynets <martynets@volia.ua>
 This file is part of ob-xkb-menu.
 
 Ob-xkb-menu is free software; you can redistribute it and/or modify it under the

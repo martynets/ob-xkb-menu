@@ -3,7 +3,7 @@
 #
 # Openbox pipe menu for X keyboard extension subsystem version 1.0
 #
-# Copyright (C) 2014 Andriy Martynets <martynets@volia.ua>
+# Copyright (C) 2014, 2016 Andriy Martynets <martynets@volia.ua>
 #--------------------------------------------------------------------------------------------------------------
 # This file is part of ob-xkb-menu.
 #
@@ -40,7 +40,7 @@ TICKED="&#10004;&#9;"
 UNTICKED="&#160;&#9;"
 
 # Desired check-mark icon fully qualified file name:
-# ICON=/usr/share/icons/lubuntu/actions/24/gtk-ok.svg
+# ICON=/usr/share/icons/Box/actions/24/gtk-ok.svg
 
 # Name of the xkblayout-state executable
 XKBLAYOUT=xkblayout-state
@@ -49,7 +49,7 @@ XKBLAYOUT=xkblayout-state
 #	Main script code starts here
 #--------------------------------------------------------------------------------------------------------------
 
-if ! type "$XKBLAYOUT"
+if ! type "$XKBLAYOUT" &> /dev/null
 then
 	XKBLAYOUT="${0%/*}/$XKBLAYOUT"
 	if [ ! -x "$XKBLAYOUT" ]
